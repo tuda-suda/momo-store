@@ -1,10 +1,12 @@
-FROM node:18.12 as builder
+FROM node:16-alpine as builder
 # Create app directory
 WORKDIR /usr/src/app
-ENV NODE_ENV=production
-ENV VUE_APP_API_URL=http://0.0.0.0:8081
+COPY package*.json .
+RUN npm install
 COPY . .
-RUN npm install && npm run build
+ENV NODE_ENV=development
+ENV VUE_APP_API_URL=/
+RUN npm run build
 
 FROM nginx:1.21.6-alpine
 COPY --from=builder /usr/src/app/dist /usr/share/nginx/html/

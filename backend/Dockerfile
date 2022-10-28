@@ -1,13 +1,13 @@
-FROM golang:1.17-alpine
+FROM golang:1.19.2-alpine3.16 as builder
 WORKDIR /usr/src
 COPY . .
 RUN go build ./cmd/api/
 
-FROM golang:1.17-alpine
+FROM golang:1.19.2-alpine3.16
 WORKDIR /app
 RUN addgroup --system goserv \
-    && adduser --system --shell /bin/false --disabled-login --ingroup goserv goserv \
-    && apt update && apt install -y dumb-init curl && apt clean
+    && adduser -S -s /bin/false -G goserv goserv -D -H\
+    && apk add --no-cache dumb-init
 COPY --chown=goserv:goserv \
     --from=builder \
     /usr/src/api ./api
