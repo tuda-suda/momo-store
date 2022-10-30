@@ -1,5 +1,5 @@
 stages:
-  module-pipeline
+  - module-pipeline
 
 variables:
   VERISION: 1.0.0
