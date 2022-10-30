@@ -7,9 +7,8 @@ variables:
 frontend:
   stage: module-pipeline
   trigger:
-    include:
-      - "/frontend/.gitlab-ci.yml"
-    stategy: depend
+    include: /frontend/.gitlab-ci.yml
+    strategy: depend
   only:
     changes:
       - frontend/**/*
@@ -17,9 +16,8 @@ frontend:
 backend:
   stage: module-pipeline
   trigger:
-    include:
-      - "/backend/.gitlab-ci.yml"
-    stategy: depend
+    include: /backend/.gitlab-ci.yml
+    strategy: depend
   only:
     changes:
       - backend/**/*
