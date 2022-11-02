@@ -1,0 +1,8 @@
+replicas: 2
+rollingUpdate:
+  maxUnavaliable: 1
+  maxSurge: 20%
+
+image:
+  repository: gitlab.praktikum-services.ru:5050/m.gumerov/momo-store/momo-backend
+  tag: ""

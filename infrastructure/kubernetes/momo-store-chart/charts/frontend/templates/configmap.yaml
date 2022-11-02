@@ -1,0 +1,30 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-config
+data:
+  momo-store.conf: |
+    server {
+
+      listen {{ .Values.global.frontend.port.external }};
+
+      location / {
+        root   /usr/share/nginx/html;
+        index  index.html;
+        try_files $uri $uri/ /index.html;
+      }
+
+      location /categories {
+          proxy_pass http://backend:{{ .Values.global.backend.port.external }};
+      }
+
+      location /products {
+          proxy_pass http://backend:{{ .Values.global.backend.port.external }};
+      }
+
+      location /auth {
+          proxy_pass http://backend:{{ .Values.global.backend.port.external }};
+      }
+    }
+
