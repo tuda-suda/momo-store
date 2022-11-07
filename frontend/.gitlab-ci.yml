@@ -8,7 +8,7 @@ stages:
   - release
 
 variables:
-  VERISION: 1.0.0
+  VERSION: 1.0.0
 
 frontend-build-image:
   stage: build
@@ -18,7 +18,7 @@ frontend-build-image:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - cd frontend
-    - docker build --tag $CI_REGISTRY_IMAGE/momo-frontend:$CI_COMMIT_SHA
+    - docker build --tag $CI_REGISTRY_IMAGE/momo-frontend:$CI_COMMIT_SHA .
     - docker push $CI_REGISTRY_IMAGE/momo-frontend:$CI_COMMIT_SHA
 
 sonarqube-frontend-sast:
@@ -28,10 +28,10 @@ sonarqube-frontend-sast:
     - cd frontend
     - >
       sonar-scanner -Dsonar.qualitygate.wait=true
-        -Dsonar.projectKey=${SONARQUBE_FRONTEND_PROJECT_KEY}
-        -Dsonar.sources=.
-        -Dsonar.host.url=${SONARQUBE_URL}
-        -Dsonar.login=${SONARQUBE_LOGIN}
+      -Dsonar.projectKey=${SONARQUBE_FRONTEND_PROJECT_KEY}
+      -Dsonar.sources=.
+      -Dsonar.host.url=${SONARQUBE_URL}
+      -Dsonar.login=${SONARQUBE_LOGIN}
 
 backend-release-image:
   variables:
@@ -42,8 +42,8 @@ backend-release-image:
     - until docker info; do sleep 1; done
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - docker pull $CI_REGISTRY_IMAGE/momo-backend:$CI_COMMIT_SHA
-    - docker tag $CI_REGISTRY_IMAGE/momo-backend:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE/momo-backend:$VERSION
-    - docker push $CI_REGISTRY_IMAGE/momo-backend:$VERSION
-    - docker tag $CI_REGISTRY_IMAGE/momo-backend:$VERSION $CI_REGISTRY_IMAGE/momo-backend:latest
-    - docker push $CI_REGISTRY_IMAGE/momo-backend:latest
+    - docker pull $CI_REGISTRY_IMAGE/momo-frontend:$CI_COMMIT_SHA
+    - docker tag $CI_REGISTRY_IMAGE/momo-frontend:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE/momo-frontend:$VERSION
+    - docker push $CI_REGISTRY_IMAGE/momo-frontend:$VERSION
+    - docker tag $CI_REGISTRY_IMAGE/momo-frontend:$VERSION $CI_REGISTRY_IMAGE/momo-frontend:latest
+    - docker push $CI_REGISTRY_IMAGE/momo-frontend:latest

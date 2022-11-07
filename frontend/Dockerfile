@@ -1,7 +1,7 @@
 FROM node:16-alpine as builder
 # Create app directory
 WORKDIR /usr/src/app
-COPY package*.json .
+COPY package*.json ./
 RUN npm install
 COPY . .
 ENV NODE_ENV=development
