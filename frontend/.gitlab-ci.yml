@@ -1,0 +1,49 @@
+include:
+  - project: 'templates/ci'
+    file: 'DockerInDockerTemplate.yml'
+
+stages:
+  - build
+  - test
+  - release
+
+variables:
+  VERSION: 1.0.0
+
+frontend-build-image:
+  stage: build
+  image: docker:20.10.12-dind-rootless
+  before_script:
+    - until docker info; do sleep 1; done
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - cd frontend
+    - docker build --tag $CI_REGISTRY_IMAGE/momo-frontend:$CI_COMMIT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/momo-frontend:$CI_COMMIT_SHA
+
+sonarqube-frontend-sast:
+  stage: test
+  image: sonarsource/sonar-scanner-cli:latest
+  script:
+    - cd frontend
+    - >
+      sonar-scanner -Dsonar.qualitygate.wait=true
+      -Dsonar.projectKey=${SONARQUBE_FRONTEND_PROJECT_KEY}
+      -Dsonar.sources=.
+      -Dsonar.host.url=${SONARQUBE_URL}
+      -Dsonar.login=${SONARQUBE_LOGIN}
+
+backend-release-image:
+  variables:
+    GIT_STRATEGY: none
+  image: docker:20.10.12-dind-rootless
+  stage: release
+  before_script:
+    - until docker info; do sleep 1; done
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker pull $CI_REGISTRY_IMAGE/momo-frontend:$CI_COMMIT_SHA
+    - docker tag $CI_REGISTRY_IMAGE/momo-frontend:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE/momo-frontend:$VERSION
+    - docker push $CI_REGISTRY_IMAGE/momo-frontend:$VERSION
+    - docker tag $CI_REGISTRY_IMAGE/momo-frontend:$VERSION $CI_REGISTRY_IMAGE/momo-frontend:latest
+    - docker push $CI_REGISTRY_IMAGE/momo-frontend:latest
