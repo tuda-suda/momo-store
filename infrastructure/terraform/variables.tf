@@ -34,15 +34,3 @@ variable "zone" {
   type        = string
   default     = "ru-central1-a"
 }
-
-variable "s3_access_key" {
-  description = "Yandex Storage access key"
-  type        = string
-  sensitive   = true
-}
-
-variable "s3_secret_key" {
-  description = "Yandex Storage secret key"
-  type        = string
-  sensitive   = true
-}
