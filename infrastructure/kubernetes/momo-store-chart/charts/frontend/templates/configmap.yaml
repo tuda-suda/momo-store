@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: {{ .Chart.Name }}-config
 data:
-  momo-store.conf: |
+  default.conf: |
     server {
 
       listen {{ .Values.global.frontend.port}};
