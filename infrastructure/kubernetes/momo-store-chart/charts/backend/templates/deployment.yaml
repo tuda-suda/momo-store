@@ -31,7 +31,7 @@ spec:
         app.kubernetes.io/instance: momo-store
       annotations:
         prometheus.io/path: /metrics
-        prometheus.io/port: {{ .Values.global.backend.port.internal | quote }}
+        prometheus.io/port: {{ .Values.global.backend.port | quote }}
         prometheus.io/scrape: "true"
     spec:
       containers:
@@ -39,11 +39,11 @@ spec:
           image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
           ports:
             - name: {{ .Chart.Name }}
-              containerPort: {{ .Values.global.backend.port.internal }}
+              containerPort: {{ .Values.global.backend.port }}
           livenessProbe:
             httpGet:
               path: /health
-              port: {{ .Values.global.backend.port.internal }}
+              port: {{ .Values.global.backend.port }}
             initialDelaySeconds: 45
             periodSeconds: 30
             timeoutSeconds: 2

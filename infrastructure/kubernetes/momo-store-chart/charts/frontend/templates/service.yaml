@@ -6,9 +6,9 @@ metadata:
     app: {{ .Chart.Name }}
 spec:
   ports:
-    - port: {{ .Values.global.frontend.port.external }}
+    - port: {{ .Values.global.frontend.port }}
       protocol: TCP
-      targetPort: {{ .Values.global.frontend.port.internal }}
+      targetPort: {{ .Values.global.frontend.port }}
   selector:
     app.kubernetes.io/name: {{ .Chart.Name }}
     app.kubernetes.io/instance: momo-store

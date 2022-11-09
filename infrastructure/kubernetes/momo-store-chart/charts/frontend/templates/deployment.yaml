@@ -26,11 +26,11 @@ spec:
         app.kubernetes.io/instance: momo-store
     spec:
       containers:
-        - image: {{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag | default .Chart.AppVersion }}
+        - image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
           name: {{ .Chart.Name }}
           ports:
             - name: {{ .Chart.Name }}
-              containerPort: {{ .Values.global.frontend.port.internal }}
+              containerPort: {{ .Values.global.frontend.port }}
           volumeMounts:
           - name: nginx-conf
             mountPath: /etc/nginx/conf.d/

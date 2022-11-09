@@ -7,7 +7,7 @@ data:
   momo-store.conf: |
     server {
 
-      listen {{ .Values.global.frontend.port.external }};
+      listen {{ .Values.global.frontend.port}};
 
       location / {
         root   /usr/share/nginx/html;
@@ -16,15 +16,15 @@ data:
       }
 
       location /categories {
-          proxy_pass http://backend:{{ .Values.global.backend.port.external }};
+          proxy_pass http://backend:{{ .Values.global.backend.port }};
       }
 
       location /products {
-          proxy_pass http://backend:{{ .Values.global.backend.port.external }};
+          proxy_pass http://backend:{{ .Values.global.backend.port }};
       }
 
       location /auth {
-          proxy_pass http://backend:{{ .Values.global.backend.port.external }};
+          proxy_pass http://backend:{{ .Values.global.backend.port }};
       }
     }
 

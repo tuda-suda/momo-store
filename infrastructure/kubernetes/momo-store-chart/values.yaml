@@ -1,13 +1,9 @@
 global:
   environment: production
   backend:
-    port:
-      internal: 8081
-      external: 8081
+    port: 8081
   frontend:
-    port:
-      internal: 80
-      external: 80
+    port: 80
 
 ingress:
   className: "nginx"
