@@ -11,4 +11,4 @@ global:
 
 ingress:
   className: "nginx"
-  host: "**************" # TODO
+  host: "mgumerov-momo-store.ru"
