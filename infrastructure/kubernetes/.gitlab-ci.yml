@@ -1,0 +1,25 @@
+stages:
+  - release
+  - deploy
+
+variables:
+  CHART_VERSION: 0.1.0
+
+release-helm-chart:
+  stage: release
+  image: alpine/helm:3.10.0
+  script:
+    - helm package infrastructure/kubernetes/momo-store-chart --version $CHART_VERSION
+    - curl -u ${NEXUS_USER}:${NEXUS_PASS} ${NEXUS_URL}/repository/momo-store-helm-marat-gumerov-06/ --upload-file momo-store-${CHART_VERSION}.tgz
+
+install-helm-chart:
+  variables:
+    GIT_STRATEGY: none
+  stage: deploy
+  image: mtizima/ycli-helm:latest
+  script:
+    - mkdir ~/.kube
+    - echo "${KUBE_CONFIG}" > ~/.kube/config
+    - helm repo add nexus ${NEXUS_URL}/repository/momo-store-helm-marat-gumerov-06/ --username ${NEXUS_USER} --password ${NEXUS_PASS}
+    - helm repo update
+    - helm upgrade --atomic -i --set frontend.image.tag=$FRONTEND_VERSION,backend.image.tag=$BACKEND_VERSION momo-store nexus/momo-store --version $CHART_VERSION
