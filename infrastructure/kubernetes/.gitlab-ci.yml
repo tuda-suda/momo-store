@@ -16,7 +16,7 @@ install-helm-chart:
   variables:
     GIT_STRATEGY: none
   stage: deploy
-  image: mtizima/ycli-helm:latest
+  image: alpine/helm:3.10.0
   script:
     - mkdir ~/.kube
     - echo "${KUBE_CONFIG}" > ~/.kube/config
