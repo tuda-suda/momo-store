@@ -1,0 +1,10 @@
+global:
+  environment: production
+  backend:
+    port: 8081
+  frontend:
+    port: 80
+
+ingress:
+  className: "nginx"
+  host: "mgumerov-momo-store.ru"

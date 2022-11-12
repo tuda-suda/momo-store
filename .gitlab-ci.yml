@@ -1,8 +1,6 @@
 stages:
   - module-pipeline
-
-variables:
-  VERSION: 1.0.0
+  - deploy
 
 frontend:
   stage: module-pipeline
@@ -21,3 +19,14 @@ backend:
   only:
     changes:
       - backend/**/*
+
+deploy-app:
+  stage: deploy
+  trigger:
+    include: /infrastructure/kubernetes/.gitlab-ci.yml
+    strategy: depend
+  only:
+    changes:
+      - backend/**/*
+      - frontend/**/*
+      - infrastructure/kubernetes/**/*

@@ -14,7 +14,13 @@ variable "cores" {
 variable "memory" {
   description = "memory"
   type        = number
-  default     = 2
+  default     = 4
+}
+
+variable "scale" {
+  description = "scale"
+  type        = number
+  default     = 1
 }
 
 variable "cloud_id" {
