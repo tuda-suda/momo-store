@@ -8,3 +8,5 @@ global:
 ingress:
   className: "nginx"
   host: "mgumerov-momo-store.ru"
+
+dockerconfigjson: xxx
