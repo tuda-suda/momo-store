@@ -1,5 +1,6 @@
 stages:
   - module-pipeline
+  - consume-dotenv
   - deploy
 
 frontend:
@@ -20,11 +21,33 @@ backend:
     changes:
       - backend/**/*
 
+consume-dotenv-from-module-pipeline:
+  stage: consume-dotenv
+  script:
+    - >
+      echo -e "BACKEND_VERSION=$BACKEND_VERSION\n
+      FRONTEND_VERSION=$FRONTEND_VERSION" >> .env
+  needs:
+    - project: m.gumerov/momo-store
+      job: get-backend-version
+      artifacts: true
+      optional: true
+    - project: m.gumerov/momo-store
+      job: get-frontend-version
+      artifacts: true
+      optional: true
+  artifacts:
+    reports:
+      dotenv: .env
+
 deploy-app:
   stage: deploy
   trigger:
     include: /infrastructure/kubernetes/.gitlab-ci.yml
     strategy: depend
+  needs:
+    - job: consume-dotenv-from-module-pipeline
+      artifacts: true
   only:
     changes:
       - backend/**/*

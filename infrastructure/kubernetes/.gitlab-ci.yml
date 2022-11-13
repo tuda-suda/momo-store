@@ -22,9 +22,9 @@ install-helm-chart:
     - echo "${KUBE_CONFIG}" > ~/.kube/config
     - helm repo add nexus ${NEXUS_URL}/repository/momo-store-helm-marat-gumerov-06/ --username ${NEXUS_USER} --password ${NEXUS_PASS}
     - helm repo update
+    - export helm_set_version_opts="--set $( [[ -n "${FRONTEND_VERSION}" ]] && echo "frontend.image.tag=${FRONTEND_VERSION}" ),$( [[ -n "${BACKEND_VERSION}" ]] && echo "backend.image.tag=${BACKEND_VERSION}" )"
     - >
-      helm upgrade --atomic -i
-      --set frontend.image.tag=$FRONTEND_VERSION
-      --set backend.image.tag=$BACKEND_VERSION
+      helm upgrade --atomic -i --reuse-values
+      ${helm_set_version_opts}
       --set dockerconfigjson="${DOCKERCONFIGJSON}"
       momo-store nexus/momo-store --version $CHART_VERSION
