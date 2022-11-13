@@ -28,12 +28,10 @@ consume-dotenv-from-module-pipeline:
       echo -e "BACKEND_VERSION=$BACKEND_VERSION\n
       FRONTEND_VERSION=$FRONTEND_VERSION" >> .env
   needs:
-    - project: m.gumerov/momo-store
-      job: get-backend-version
+    - job: get-backend-version
       artifacts: true
       optional: true
-    - project: m.gumerov/momo-store
-      job: get-frontend-version
+    - job: get-frontend-version
       artifacts: true
       optional: true
   artifacts:
