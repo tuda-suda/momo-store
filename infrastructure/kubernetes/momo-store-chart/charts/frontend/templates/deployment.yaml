@@ -26,8 +26,9 @@ spec:
         app.kubernetes.io/instance: momo-store
     spec:
       containers:
-        - image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
-          name: {{ .Chart.Name }}
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
+          imagePullPolicy: IfNotPresent
           ports:
             - name: {{ .Chart.Name }}
               containerPort: {{ .Values.global.frontend.port }}
